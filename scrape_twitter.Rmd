@@ -1,0 +1,71 @@
+---
+title: "Twitter Data HashTag Extraction using R: Prepared for Internet 
+Policy Africa Meet March 1 2018"
+author: "Richard Ngamita"
+date: "March 01 2018"
+output: html_document
+---
+```{r}
+# Twitter provides the REST search api for searching tweets from Twitter’s search
+# index. This is different than using the streaming filter API, in that the later is
+# real-time and starts giving you results from the point of query, while the former
+# is retrospective and will give you results from past, up to as far back as the
+# search index goes (usually last 7 days). While the streaming API seems like the
+# thing to use when you want to track a certain query in real time, there are
+# situations where you may want to use the regular REST search API. You may also
+# want to combine the two approaches, i.e. start 2 searches, one using the streaming
+# filter API to go forward in time and one using the REST search API to go backwards # in time, in order to get some on-going and past context for your search term
+
+```
+
+    
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = FALSE, warning = FALSE)
+```
+
+```{r}
+# List of packages required for this Twitter Search API data analysis
+pkg <- c("twitteR", "ROAuth", "base64enc")
+
+# Check if packages are not installed and assign the
+# names of the packages not installed to the variable new.pkg
+new.pkg <- pkg[!(pkg %in% installed.packages())]
+
+# If there are any packages in the list that aren't installed,
+# install them
+if (length(new.pkg)) {
+    install.packages(new.pkg, repos = "http://cran.rstudio.com")
+}
+# Load libraries for accessing the Twitter search API. 
+library(twitteR)
+library(ROAuth)
+library(base64enc)
+
+```
+
+```{r }
+# connect to twitter api and authenticate. Select one for direct authentication
+# go to: https://apps.twitter.com to get these credentials. 
+api_key <- "QKwrEqeCi8TPXNY8qGrIcZgXE"
+api_secret <- "RxpELmc2qetpfNG20dkK8vYEd4GgIFXih8zHnpGiFKLGZcVcs1"
+access_token <- "3910492041-mQ8HHYqgwHmayYZRl6vMzPRDMSnCwaP54eNUg1v"
+access_token_secret <- "B55w0tLONnib4nI8UFi5EK6R1YaXvMLqzkOYf7LP0WjYW" 
+setup_twitter_oauth(api_key, api_secret, access_token,access_token_secret)
+```
+
+```{r }
+# extract hashtag data. The maximum for Twitter is 3200, but we use 50 for the case of this tutorial
+tweets <- searchTwitter("#mugabe", n=50)
+```
+
+```{r }
+# convert variable to data frame 
+tweets.df <- do.call(rbind, lapply(tweets, as.data.frame))
+```
+
+```{r }
+# save extracted data to csv file
+# Windows compute d:/internet_policy.csv or right path to writable drive. 
+write.csv(tweets.df, "~/internet_policy.csv")
+head(tweets.df, n = 20)
+```
