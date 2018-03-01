@@ -61,8 +61,8 @@ getUsers("me", token=fb_oauth, private_info=TRUE)
 ```
 
 ```{r }
-# The following line downloads the ~200 most recent posts on the facebook page of Donald Trump
-page <- getPage("DonaldTrump", token=fb_oauth, n=20, reactions=TRUE, api="v2.9") 
+# The following line downloads the ~200 most recent posts on the facebook page of BBC Africa
+page <- getPage("bbcafrica", token=fb_oauth, n=20, reactions=TRUE, api="v2.9") 
 ```
 
 ```{r }
